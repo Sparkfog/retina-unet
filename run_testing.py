@@ -5,12 +5,16 @@
 ##################################################
 
 import os, sys
-import ConfigParser
+import configparser as ConfigParser
+
+from keras import backend as K
+# K.set_image_data_format('channels_last')  # Ensure channels_last
+print("Keras image data format:", K.image_data_format())
 
 
 #config file to read from
 config = ConfigParser.RawConfigParser()
-config.readfp(open(r'./configuration.txt'))
+config.read(r'./configuration.txt')
 #===========================================
 #name of the experiment!!
 name_experiment = config.get('experiment name', 'name')
@@ -20,7 +24,7 @@ run_GPU = '' if sys.platform == 'win32' else ' THEANO_FLAGS=device=gpu,floatX=fl
 
 #create a folder for the results if not existing already
 result_dir = name_experiment
-print "\n1. Create directory for the results (if not already existing)"
+print("\n1. Create directory for the results (if not already existing)")
 if os.path.exists(result_dir):
     pass
 elif sys.platform=='win32':
@@ -31,8 +35,8 @@ else:
 
 # finally run the prediction
 if nohup:
-    print "\n2. Run the prediction on GPU  with nohup"
+    print("\n2. Run the prediction on GPU  with nohup")
     os.system(run_GPU +' nohup python -u ./src/retinaNN_predict.py > ' +'./'+name_experiment+'/'+name_experiment+'_prediction.nohup')
 else:
-    print "\n2. Run the prediction on GPU (no nohup)"
+    print("\n2. Run the prediction on GPU (no nohup)")
     os.system(run_GPU +' python ./src/retinaNN_predict.py')

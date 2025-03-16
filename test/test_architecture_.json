@@ -1,0 +1,243 @@
+{
+  "class_name": "Model",
+  "config": {
+    "name": "model_1",
+    "layers": [
+      {
+        "class_name": "InputLayer",
+        "config": {
+          "batch_input_shape": [null, 1, 48, 48],
+          "dtype": "float32",
+          "name": "input_1"
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_1",
+          "filters": 32,
+          "kernel_size": [3, 3],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "Dropout",
+        "config": {
+          "name": "dropout_1",
+          "rate": 0.2
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_2",
+          "filters": 32,
+          "kernel_size": [3, 3],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "MaxPooling2D",
+        "config": {
+          "name": "maxpooling2d_1",
+          "pool_size": [2, 2],
+          "strides": [2, 2],
+          "padding": "valid",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_3",
+          "filters": 64,
+          "kernel_size": [3, 3],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "Dropout",
+        "config": {
+          "name": "dropout_2",
+          "rate": 0.2
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_4",
+          "filters": 64,
+          "kernel_size": [3, 3],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "MaxPooling2D",
+        "config": {
+          "name": "maxpooling2d_2",
+          "pool_size": [2, 2],
+          "strides": [2, 2],
+          "padding": "valid",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_5",
+          "filters": 128,
+          "kernel_size": [3, 3],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "Dropout",
+        "config": {
+          "name": "dropout_3",
+          "rate": 0.2
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_6",
+          "filters": 128,
+          "kernel_size": [3, 3],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "UpSampling2D",
+        "config": {
+          "name": "upsampling2d_1",
+          "size": [2, 2]
+        }
+      },
+      {
+        "class_name": "Concatenate",
+        "config": {
+          "name": "merge_1",
+          "axis": 1
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_7",
+          "filters": 64,
+          "kernel_size": [3, 3],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "Dropout",
+        "config": {
+          "name": "dropout_4",
+          "rate": 0.2
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_8",
+          "filters": 64,
+          "kernel_size": [3, 3],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "UpSampling2D",
+        "config": {
+          "name": "upsampling2d_2",
+          "size": [2, 2]
+        }
+      },
+      {
+        "class_name": "Concatenate",
+        "config": {
+          "name": "merge_2",
+          "axis": 1
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_9",
+          "filters": 32,
+          "kernel_size": [3, 3],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "Dropout",
+        "config": {
+          "name": "dropout_5",
+          "rate": 0.2
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_10",
+          "filters": 32,
+          "kernel_size": [3, 3],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "Conv2D",
+        "config": {
+          "name": "conv2d_11",
+          "filters": 2,
+          "kernel_size": [1, 1],
+          "activation": "relu",
+          "padding": "same",
+          "data_format": "channels_first"
+        }
+      },
+      {
+        "class_name": "Reshape",
+        "config": {
+          "name": "reshape_1",
+          "target_shape": [2, 2304]
+        }
+      },
+      {
+        "class_name": "Permute",
+        "config": {
+          "name": "permute_1",
+          "dims": [2, 1]
+        }
+      },
+      {
+        "class_name": "Activation",
+        "config": {
+          "name": "activation_1",
+          "activation": "softmax"
+        }
+      }
+    ],
+    "input_layers": [["input_1", 0, 0]],
+    "output_layers": [["activation_1", 0, 0]]
+  }
+}

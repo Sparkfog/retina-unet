@@ -9,14 +9,18 @@
 
 
 import numpy as np
-import ConfigParser
+import configparser as ConfigParser
+
 
 from keras.models import Model
-from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, UpSampling2D, Reshape, core, Dropout
+from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, UpSampling2D, Reshape, Dense, Flatten, Dropout,Permute,Activation
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as K
-from keras.utils.vis_utils import plot_model as plot
+# from keras.utils.vis_utils import plot_model as plot
+
+from tensorflow.keras.utils import plot_model as plot
+
 from keras.optimizers import SGD
 
 import sys
@@ -25,6 +29,21 @@ from help_functions import *
 
 #function to obtain data for training/testing (validation)
 from extract_patches import get_data_training
+
+import tensorflow as tf
+
+# Ensure TensorFlow detects and uses GPU
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        tf.config.set_visible_devices(gpus[0], 'GPU')  # Use first GPU
+    except RuntimeError as e:
+        print(e)
+
+print("Using GPU: ", tf.config.list_physical_devices('GPU'))
+
 
 
 
@@ -58,10 +77,10 @@ def get_unet(n_ch,patch_height,patch_width):
     conv5 = Conv2D(32, (3, 3), activation='relu', padding='same',data_format='channels_first')(conv5)
     #
     conv6 = Conv2D(2, (1, 1), activation='relu',padding='same',data_format='channels_first')(conv5)
-    conv6 = core.Reshape((2,patch_height*patch_width))(conv6)
-    conv6 = core.Permute((2,1))(conv6)
+    conv6 = Reshape((2,patch_height*patch_width))(conv6)
+    conv6 = Permute((2,1))(conv6)
     ############
-    conv7 = core.Activation('softmax')(conv6)
+    conv7 = Activation('softmax')(conv6)
 
     model = Model(inputs=inputs, outputs=conv7)
 
@@ -119,10 +138,10 @@ def get_gnet(n_ch,patch_height,patch_width):
     conv9 = Convolution2D(32, 3, 3, activation='relu', border_mode='same')(conv9)
     #
     conv10 = Convolution2D(2, 1, 1, activation='relu', border_mode='same')(conv9)
-    conv10 = core.Reshape((2,patch_height*patch_width))(conv10)
-    conv10 = core.Permute((2,1))(conv10)
+    conv10 = Reshape((2,patch_height*patch_width))(conv10)
+    conv10 = Permute((2,1))(conv10)
     ############
-    conv10 = core.Activation('softmax')(conv10)
+    conv10 = Activation('softmax')(conv10)
 
     model = Model(input=inputs, output=conv10)
 
@@ -166,12 +185,17 @@ n_ch = patches_imgs_train.shape[1]
 patch_height = patches_imgs_train.shape[2]
 patch_width = patches_imgs_train.shape[3]
 model = get_unet(n_ch, patch_height, patch_width)  #the U-net model
-print "Check: final output of the network:"
-print model.output_shape
+print("Check: final output of the network:")
+print(model.output_shape)
 plot(model, to_file='./'+name_experiment+'/'+name_experiment + '_model.png')   #check how the model looks like
-json_string = model.to_json()
-open('./'+name_experiment+'/'+name_experiment +'_architecture.json', 'w').write(json_string)
+print("0")
 
+json_string = model.to_json()
+open('./'+name_experiment+'/'+name_experiment +'_architecture_updated.json', 'w').write(json_string)
+print("1")
+
+
+print(f"Dataset size: {sys.getsizeof(patches_masks_train) / (1024**3):.2f} GB")
 
 
 #============  Training ==================================
@@ -186,9 +210,14 @@ checkpointer = ModelCheckpoint(filepath='./'+name_experiment+'/'+name_experiment
 #         return lrate
 #
 # lrate_drop = LearningRateScheduler(step_decay)
+print("1.5")
+
 
 patches_masks_train = masks_Unet(patches_masks_train)  #reduce memory consumption
-model.fit(patches_imgs_train, patches_masks_train, nb_epoch=N_epochs, batch_size=batch_size, verbose=2, shuffle=True, validation_split=0.1, callbacks=[checkpointer])
+
+print("2")
+
+model.fit(patches_imgs_train, patches_masks_train, epochs=N_epochs, batch_size=batch_size, verbose=2, shuffle=True, validation_split=0.1, callbacks=[checkpointer])
 
 
 #========== Save and test the last model ===================

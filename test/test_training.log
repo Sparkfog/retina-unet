@@ -1,0 +1,9 @@
+2025-03-15 16:53:28.541797: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-03-15 16:53:29.543777: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+Traceback (most recent call last):
+  File "C:\Users\Linus\PycharmProjects\retina-unet\src\retinaNN_training.py", line 28, in <module>
+    from help_functions import *
+  File "C:\Users\Linus\PycharmProjects\retina-unet\lib\help_functions.py", line 88
+    print "mode " +str(mode) +" not recognized, it can be 'original' or 'threshold'"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?
